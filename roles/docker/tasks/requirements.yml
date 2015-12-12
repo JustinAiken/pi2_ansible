@@ -1,0 +1,12 @@
+- name: Ensure python-setuptools is installed
+  apt:
+    name: python-setuptools
+    state: latest
+  become: yes
+  become_method: sudo
+
+- name: Make sure required docker-py packages are installed
+  easy_install:
+    name: docker-py
+  become: yes
+  become_method: sudo

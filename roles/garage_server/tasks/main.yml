@@ -1,0 +1,48 @@
+- name: create build directory
+  file:
+    dest: '{{ build_dir }}'
+    state: directory
+
+- name: Clone sinatra git repo
+  git:
+    repo:    "{{ sinatra_repo }}"
+    dest:    "{{ build_dir }}/{{ sinatra_app }}"
+    version: "{{ sinatra_ref }}"
+  register: sinatra_repo
+
+- name: Archive repo
+  shell: "cd {{ build_dir }}/{{ sinatra_app }} && git archive -o ../{{ sinatra_app }}.tar HEAD"
+
+- name: Make sure empty file for 'token' exists
+  file:
+    path: '{{ token_path }}'
+    state: touch
+
+- name: Generate Dockerfile
+  template:
+    src: 'Dockerfile'
+    dest: "{{build_dir}}/Dockerfile"
+
+- name: build image
+  docker_image:
+    name: '{{ sinatra_app }}'
+    path: '{{ build_dir }}'
+    state: build
+
+- name: Setup Garage Docker
+  docker:
+    name:  '{{ sinatra_app }}'
+    image: '{{ sinatra_app }}'
+    state: reloaded
+    volumes:
+    - "{{ token_path }}:/srv/{{ sinatra_app }}/token"
+    ports:
+    - "4567:4567"
+    env:
+      MYQ_USER: '{{ myq_user }}'
+      MYQ_PASS: '{{ myq_pass }}'
+      MYQ_DOOR_ID: '{{ myq_door_id }}'
+      OPENHAB_URL: '{{ openhab_url }}'
+      OPENHAB_ITEMNAME: '{{ openhab_itemname }}'
+    extra_hosts:
+      pi2: '{{ pi_ipaddress }}'

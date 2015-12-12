@@ -1,0 +1,44 @@
+- name: Clone the OpenHAB configuration
+  git:
+    repo:     '{{ openhab_config_repo }}'
+    dest:     '/home/pi/openhab_config'
+    version:  'master'
+    ssh_opts: '-o StrictHostKeyChecking=no'
+
+- name: Specify OpenHAB addons
+  template:
+    src:  'templates/addons.cfg'
+    dest: '/home/pi/openhab_config/addons.cfg'
+
+- name: Specify OpenHAB Timezone
+  copy:
+    content: '{{ openhab_timezone }}'
+    dest:    '/home/pi/openhab_config/timezone'
+
+- name: Copy icon I use
+  copy:
+    src:   'files/justlock.png'
+    dest:  '/home/pi/openhab_config/'
+
+- name: Setup OpenHAB Docker
+  docker:
+    name: openhab
+    image: justinaiken/rpi-openhab
+    pull: always
+    state: reloaded
+    ports:
+    - "80:8080"
+    - "5555:5555"
+    - "9001:9001"
+    volumes:
+    - "/home/pi/openhab_config:/etc/openhab"
+    - "/home/pi/openhab_config/justlock.png:/opt/openhab/webapps/images/justlock.png"
+    links:
+    - "mysql:mysql"
+    env:
+      OPENHAB_VERSION:  "{{ openhab_version }}"
+      MYOPENHAB_UUID:   "{{ myopenhab_uuid }}"
+      MYOPENHAB_SECRET: "{{ myopenhab_secret }}"
+    extra_hosts:
+      winkhub: "{{ winkhub_ipaddress }}"
+      pi2: "{{ pi_ipaddress }}"

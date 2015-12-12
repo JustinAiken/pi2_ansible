@@ -1,0 +1,15 @@
+- name: Check if docker.deb is installed
+  command: "dpkg-query -W -f={{ docker_version }} docker-hypriot"
+  register: docker_hypriot_check_deb
+  failed_when: docker_hypriot_check_deb.rc > 1
+  changed_when: docker_hypriot_check_deb.rc == 1
+
+- name: Download Docker .deb
+  get_url:
+    url: "{{docker_url}}"
+    dest: /tmp/{{docker_package}}
+  when: docker_hypriot_check_deb.rc == 1
+
+- name: Install Docker .deb
+  apt: deb="/tmp/{{docker_package}}"
+  when: docker_hypriot_check_deb.rc == 1

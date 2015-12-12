@@ -1,0 +1,13 @@
+---
+# Pi 2 configuration
+
+- name: Get the pi2 ready!
+  gather_facts: no
+  hosts: all
+  remote_user: pi
+  roles:
+  - role: docker
+  - role: common
+  - role: mysql_server
+  - role: openhab_server
+  - role: garage_server

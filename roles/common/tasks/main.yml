@@ -1,0 +1,20 @@
+- name: Set Hostname
+  hostname: name=pi2
+  become: yes
+  become_method: sudo
+
+- name: Build hosts file (backups will be made)
+  lineinfile: dest=/etc/hosts line='127.0.0.1 {{ hostname }}' state=present backup=yes
+  become: yes
+  become_method: sudo
+
+- name: Ensure .ssh directory exists.
+  file:
+    dest: "/home/pi/.ssh"
+    mode: 0700
+    state: directory
+- name: Install ssh key
+  copy:
+    content: "{{ private_key }}"
+    dest: "/home/pi/.ssh/id_rsa"
+    mode: 0600

@@ -1,0 +1,3 @@
+#! /bin/bash
+
+ansible-playbook -i pi2, playbook.yml --extra-vars "@secrets.json"

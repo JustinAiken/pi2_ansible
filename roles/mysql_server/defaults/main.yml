@@ -1,0 +1,5 @@
+mysql_root_password: 'somethingsecret'
+mysql_database: 'openhab'
+mysql_user: 'openhab'
+mysql_password: 'somethingsecret'
+mysql_allow_empty_password: 'yes'

@@ -1,0 +1,5 @@
+sinatra_app: 'garage'
+sinatra_repo: 'https://github.com/JustinAiken/garage.git'
+sinatra_ref: 'sinatra'
+build_dir: '/home/pi/rpi-sinatra'
+token_path: '/home/pi/garage_token'

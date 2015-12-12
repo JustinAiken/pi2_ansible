@@ -1,0 +1,20 @@
+- name: Assures /home/pi/mysql dir exists
+  file:
+    path: /home/pi/mysql
+    state: directory
+- name: Setup mySQL Docker
+  docker:
+    name: mysql
+    image: hypriot/rpi-mysql
+    pull: always
+    state: reloaded
+    ports:
+    - "3306:3306"
+    volumes:
+    - '/home/pi/mysql:/var/lib/mysql'
+    env:
+      MYSQL_ROOT_PASSWORD:        '{{ mysql_root_password }}'
+      MYSQL_DATABASE:             '{{ mysql_database }}'
+      MYSQL_USER:                 '{{ mysql_user }}'
+      MYSQL_PASSWORD:             '{{ mysql_password }}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: '{{ mysql_allow_empty_password }}'
