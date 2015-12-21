@@ -15,6 +15,15 @@
     content: '{{ openhab_timezone }}'
     dest:    '/home/pi/openhab_config/timezone'
 
+- name: Copy MYOPENHAB_UUID
+  copy:
+    content: '{{ myopenhab_uuid }}'
+    dest:    '/home/pi/openhab_config/uuid'
+- name: Copy MYOPENHAB_SECRET
+  copy:
+    content: '{{ myopenhab_secret }}'
+    dest:    '/home/pi/openhab_config/secret'
+
 - name: Copy icon I use
   copy:
     src:   'files/justlock.png'
@@ -33,6 +42,8 @@
     volumes:
     - "/home/pi/openhab_config:/etc/openhab"
     - "/home/pi/openhab_config/justlock.png:/opt/openhab/webapps/images/justlock.png"
+    - "/home/pi/openhab_config/uuid:/opt/openhab/webapps/static/uuid"
+    - "/home/pi/openhab_config/secret:/opt/openhab/webapps/static/secret"
     links:
     - "mysql:mysql"
     env:
