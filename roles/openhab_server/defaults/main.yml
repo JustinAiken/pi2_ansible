@@ -1,3 +1,3 @@
-openhab_version:     "1.7.1"
+openhab_version:     "1.8.1"
 openhab_config_repo: "git@bitbucket.org:JustinAiken/openhab_configurations.git"
 openhab_timezone:    "America/Denver"
