@@ -10,4 +10,3 @@
   - role: common
   - role: mysql_server
   - role: openhab_server
-  - role: garage_server
